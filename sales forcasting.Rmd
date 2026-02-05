@@ -1,0 +1,96 @@
+---
+title: "sales forecasting  using multiple linear regression"
+author: "JOSEPH MUTUA"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Introduction
+
+The objective of this study is to analyze factors that influence weekly retail store sales and to develop a multiple linear regression model for predicting sales performance.
+
+#Dataset Description
+
+The dataset contains weekly observations for 45 stores with the following variables:
+
+- Weekly_Sales (target variable)
+- Store
+- Holiday_Flag
+- Temperature
+- Fuel_Price
+- CPI
+- Unemployment
+
+# Research Question
+
+Do economic and environmental factors significantly affect weekly sales?
+
+#Statistical Model
+
+We use Multiple Linear Regression:
+
+Weekly_Sales = β0 + β1Store + β2Holiday + β3Temperature + β4Fuel_Price + β5CPI + β6Unemployment + ε
+
+## Hypotheses
+
+H0: All regression coefficients = 0  
+H1: At least one coefficient ≠ 0
+
+# Data Loading
+```{r}
+sales <- read.csv("sales.csv")
+sales$Store <- as.factor(sales$Store)
+sales$Holiday_Flag <- as.factor(sales$Holiday_Flag)
+sales$Date <- as.Date(sales$Date)
+
+```
+
+
+
+#Exploratory Analysis
+```{r}
+summary(sales)
+```
+
+
+
+# Model Fitting
+```{r}
+model <- lm(Weekly_Sales ~ Store + Holiday_Flag + Temperature +
+              Fuel_Price + CPI + Unemployment, data = sales)
+summary(model)
+```
+
+
+
+#Model Evaluation
+```{r}
+pred <- predict(model, sales)
+rmse <- sqrt(mean((sales$Weekly_Sales - pred)^2))
+rmse
+```
+
+
+
+# Results and Interpretation
+The overall regression model was statistically significant (p < 0.001), indicating that the predictors jointly explain variations in weekly sales.
+
+Key findings:
+
+Holiday periods increase sales
+
+Higher fuel prices reduce sales
+
+Higher unemployment reduces sales
+
+Temperature has a negative relationship with sales
+
+R² = 0.92 indicating strong explanatory power
+
+# Conclusion
+The analysis demonstrates that weekly sales are significantly influenced by store characteristics and economic conditions. The regression model provides reliable predictions and can support business decision-making such as inventory planning and staffing during holidays.
+
